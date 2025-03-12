@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Snippet = require("../models/snippets");
 
-router.get("/dashboard", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     let query = {};
 
@@ -16,7 +16,7 @@ router.get("/dashboard", async (req, res) => {
 
     const snippets = await Snippet.find(query).sort({ createdAt: -1 });
 
-    res.render("dashboard", { snippets });
+    res.render("dashboard", { snippets, query: req.query });
   } catch (error) {
     console.error("Error fetching snippets:", error);
     res.status(500).send("Internal Server Error");

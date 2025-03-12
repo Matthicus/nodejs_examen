@@ -3,24 +3,81 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/public/style.css" />
     <title>Document</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap");
+      body {
+        * {
+          font-family: sans-serif;
+        }
+        h1 {
+          text-align: center;
+        }
+        form {
+          display: flex;
+          background-color: #001436;
+          padding: 2rem 2rem;
+          gap: 1rem;
+          max-width: 500px;
+          border-radius: 5px;
+          margin-bottom: 2px;
+          margin: 0 auto;
+          input {
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            opacity: 0.85;
+          }
+          button {
+            border: none;
+            padding: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: white;
+            opacity: 0.85;
+
+            &:hover {
+              transform: scale(1.1);
+              background-color: white;
+            }
+          }
+        }
+      }
+      table {
+        margin: 0 auto;
+        margin-top: 4rem;
+        thead {
+          tr {
+            font-size: 1.3rem;
+          }
+        }
+        tbody {
+          tr {
+            td {
+              color: red;
+              text-align: center;
+              padding: 1.2rem 3rem;
+            }
+          }
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Code snippets</h1>
+    <h1>"Code snippets"</h1>
 
     <form action="/dashboard" method="GET">
       <input
         type="text"
         name="language"
         placeholder="filter by language"
-        value="<%= req.query.language %>"
+        value="<%= query.language %>"
       />
       <input
         type="text"
         name="tags"
         placeholder="filter by tags (comma seperated)"
-        value="<%= req.query.tags %>"
+        value="<%= query.tags %>"
       />
       <button type="submit">Filter</button>
     </form>
