@@ -1,23 +1,19 @@
-const snippet = require("../models/snippets");
+const Snippet = require("../models/snippets");
 
 exports.createSnippet = async (req, res) => {
   try {
-    const { title, code, language, tags, expiresIn } = req.body;
+    const { title, code, language, tags } = req.body;
     const encodedCode = Buffer.from(code).toString("base64");
-
-    const expiresAt = expiresIn
-      ? new Date(Date.now() + expiresIn * 1000)
-      : null;
-
     const snippet = new Snippet({
       title,
       code: encodedCode,
       language,
       tags,
-      expiresAt,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
-    await snippet.save();
 
+    await snippet.save();
     res.status(201).json(snippet);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -36,12 +32,10 @@ exports.getAllSnippets = async (req, res) => {
     } = req.query;
 
     let query = {};
-    if (language) query.language = new regExp(language, "i");
+    if (language) query.language = new RegExp(language, "i");
     if (tags) query.tags = { $all: tags.split(",") };
 
     const snippets = await Snippet.find(query)
-      .where("expiresAt")
-      .gt(new Date())
       .sort({ [sort]: order === "desc" ? -1 : 1 })
       .skip((page - 1) * limit)
       .limit(Number(limit));
@@ -60,8 +54,8 @@ exports.getAllSnippets = async (req, res) => {
 exports.getSnippetById = async (req, res) => {
   try {
     const snippet = await Snippet.findById(req.params.id);
-    if (!snippet || (snippet.expiresAt && snippet.expiresAt < new Date())) {
-      return res.status(404).json({ error: "Snippet not found or expired" });
+    if (!snippet) {
+      return res.status(404).json({ error: "Snippet not found" });
     }
 
     snippet.code = Buffer.from(snippet.code, "base64").toString("utf-8");
@@ -73,13 +67,16 @@ exports.getSnippetById = async (req, res) => {
 
 exports.updateSnippet = async (req, res) => {
   try {
-    const { code } = req.body;
-    if (code) req.body.code = Buffer.from(code).toString("base64");
+    const { code, title, language, tags } = req.body;
+    const updateData = { title, language, tags };
 
-    const snippet = await Snippet.findByIdAndUpdate(req.params.id, req.body, {
+    if (code) updateData.code = Buffer.from(code).toString("base64");
+
+    updateData.updatedAt = new Date();
+
+    const snippet = await Snippet.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
     });
-
     res.json(snippet);
   } catch (err) {
     res.status(500).json({ error: err.message });

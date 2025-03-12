@@ -6,7 +6,8 @@ const snippetSchema = new mongoose.Schema(
     code: { type: String, required: true },
     language: { type: String, required: true },
     tags: [String],
-    expiresAt: { type: Date },
+    createdAt: { type: Date },
+    updatedAt: { type: Date },
   },
   { timestamps: true }
 );
