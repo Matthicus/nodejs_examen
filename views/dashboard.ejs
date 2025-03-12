@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/public/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Code snippets</h1>
+
+    <form action="/dashboard" method="GET">
+      <input
+        type="text"
+        name="language"
+        placeholder="filter by language"
+        value="<%= req.query.language %>"
+      />
+      <input
+        type="text"
+        name="tags"
+        placeholder="filter by tags (comma seperated)"
+        value="<%= req.query.tags %>"
+      />
+      <button type="submit">Filter</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Language</th>
+          <th>Tags</th>
+          <th>Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% snippets.forEach(snippet => { %>
+        <tr>
+          <td><%= snippet.title %></td>
+          <td><%= snippet.language %></td>
+          <td><%= snippet.tags.join(', ') %></td>
+          <td><pre><%= snippet.code %></pre></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </body>
+</html>
