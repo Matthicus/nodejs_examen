@@ -11,8 +11,8 @@ const {
 const router = express.Router();
 
 router.post("/", createSnippet);
-router.post("/", getAllSnippets);
-router.post("/", getSnippetById);
+router.get("/", getAllSnippets);
+router.get("/:id", getSnippetById);
 router.put("/:id", updateSnippet);
 router.delete("/:id", deleteSnippet);
 
