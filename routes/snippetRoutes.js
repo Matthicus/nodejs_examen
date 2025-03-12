@@ -6,7 +6,7 @@ const {
   getSnippetById,
   updateSnippet,
   deleteSnippet,
-} = require("..controllers/snippetController");
+} = require("../controllers/snippetController");
 
 const router = express.Router();
 
